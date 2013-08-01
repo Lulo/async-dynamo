@@ -21,7 +21,7 @@ In any project you want to utilize the jar in, just add this to your `built.sbt`
 ```scala
 resolvers += "Local Maven Repository" at "file://" + Path.userHome.absolutePath + "/.m2/repository"
 
-libraryDependencies += "asyncdynamo" %% "async-dynamo" % "1.7.2"
+libraryDependencies += "asyncdynamo" %% "async-dynamo" % "1.7.3"
 ```
 
 ### Example
