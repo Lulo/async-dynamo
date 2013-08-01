@@ -27,6 +27,7 @@ import com.amazonaws.services.dynamodbv2.model._
 import akka.actor.Status.Failure
 import asyncdynamo.Operation.Type
 import concurrent.duration._
+import scala.language.existentials
 
 class Dynamo(config: DynamoConfig) extends Actor {
 

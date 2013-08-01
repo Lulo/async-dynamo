@@ -41,7 +41,7 @@ class DynamoObjectTest extends FreeSpec with MustMatchers with DynamoSupport{
     val tst = Person("12312321", "Piotr", "piotrga@gmail.com")
     if (! TableExists[Person]()) CreateTable[Person](5,5).blockingExecute(dynamo, 1 minute)
 
-    val saved : Option[Person] = Save(tst) andThen Read[Person](tst.id)
+    val saved : Option[Person] = Save(tst) andThen Read[Person](tst.id,false)
     saved.get must be(tst)
   }
 

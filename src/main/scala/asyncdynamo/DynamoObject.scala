@@ -16,6 +16,7 @@
 
 package asyncdynamo
 
+import scala.language.implicitConversions
 import com.amazonaws.services.dynamodbv2.model.{
   AttributeDefinition,
   AttributeValue,

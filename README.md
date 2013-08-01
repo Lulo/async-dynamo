@@ -1,5 +1,9 @@
 # async-dynamo
 
+This fork was created to work with AWS 1.5, AKKA 2.1, and Play 2.1.  
+
+With this fork you can publish to your local maven repo so it can easily be included in your own projects without waiting on others to setup new releases.
+
 ## Overview
 
 async-dynamo is an asynchronous scala client for Amazon Dynamo database. It is based on Akka library and provides asynchronous API.
@@ -10,12 +14,14 @@ For detailed information please read [User Guide][user_guide].
 
 ### SBT
 
-Add this to your `built.sbt` file:
+First checkout this fork, make any changes you want/need, then run sbt publish to generate the jar in your local repo
+
+In any project you want to utilize the jar in, just add this to your `built.sbt` file:
 
 ```scala
-resolvers += "SnowPlow Repo" at "http://maven.snplow.com/releases/"
+resolvers += "Local Maven Repository" at "file://" + Path.userHome.absolutePath + "/.m2/repository"
 
-libraryDependencies += "asyncdynamo" % "async-dynamo" % "1.7.1"
+libraryDependencies += "asyncdynamo" %% "async-dynamo" % "1.7.2"
 ```
 
 ### Example
@@ -77,15 +83,11 @@ If you need more flexibility when mapping your object to Dynamo table you can de
     }
 ```
 
-## Documentation
-
-For detailed information please read [User Guide][user_guide].
-
 ## Information for developers
 
-### Building
+### Documentation
 
-This library is build with SBT.
+For detailed information please read [User Guide][user_guide].
 
 ### AWS Credentials
 
@@ -97,43 +99,6 @@ The easiest way to do this is to add them to SBT_OPTS variable, i.e.
 To build async-dynamo run:
 
      sbt clean test
-
-### IntelliJ and SBT
-
-Generating IntelliJ project files:
-
-    sbt gen-idea
-
-_IMPORTANT: You need to run `sbt gen-idea` every time you change the dependencies._
-
-If you want to refresh the snapshot dependencies (WHICH I TRY TO AVOID) run:
-
-    sbt clean update
-
-Click on Synchronize icon in IntelliJ - it should pick it up.
-
-## Versioning
-
-major.minor.patch-SNAPSHOT
-ie.
-0.12.1
-or
-0.12.2-SNAPSHOT
-
-Please increment patch (release plugin does that) if the change is backward compatible.
-Otherwise please bump the minor version.
-
-Please do not depend on SNAPSHOTs as they promote chaos and lack of determinism.
-
-## Releasing
-
-Since we are not expecting many changes in this library we **should** not depend on snapshot versions.
-It is much easier to apply this policy to the library.
-
-In order to release a new version:
- - run `sbt release`
- - confirm or amend the release version
- - confirm next development version
 
 ## Copyright and license
 

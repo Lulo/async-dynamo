@@ -25,6 +25,7 @@ import asyncdynamo._
 import concurrent.{Promise, Future, Await}
 import util.{Failure, Success}
 
+import scala.language.postfixOps
 import scala.collection.JavaConversions._
 
 case class CreateTable[T](readThroughput: Long = 5, writeThrougput: Long = 5)(implicit dyn:DynamoObject[T]) extends DbOperation[Unit]{
