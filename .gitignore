@@ -5,3 +5,6 @@ project/target/
 target/
 .history
 /sbt.sh
+/.classpath
+/.project
+/.settings
