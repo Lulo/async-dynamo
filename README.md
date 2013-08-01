@@ -4,6 +4,40 @@ This fork was created to work with AWS 1.5, AKKA 2.1, and Play 2.1.
 
 With this fork you can publish to your local maven repo so it can easily be included in your own projects without waiting on others to setup new releases.
 
+## KNOWN ISSUES
+
+Despite the examples you CANNOT convert case classes directly to the AWS msg unless the case class has all Strings as arguments.  This means code like
+
+```scala
+    case class Person(id :String, name: String, email: String)
+    implicit val personDO = DynamoObject.of3(Person) // make Person dynamo-enabled
+
+    if (! TableExists[Person]()) //implicit kicks in to execute operation as blocking
+      CreateTable[Person](5,5).blockingExecute(dynamo, 1 minute) // overriding implicit timeout
+
+    val julian = Person("123", "Julian", "julian@gmail.com")
+    val saved : Option[Person] = Save(julian) andThen Read[Person](julian.id) // implicit automatically executes and blocks for convenience
+    assert(saved == Some(julian))
+```
+
+may work, but code like this does not due to the Long id value:
+
+```scala
+    case class Person(id :Long, name: String, email: String)
+    implicit val personDO = DynamoObject.of3(Person) // make Person dynamo-enabled
+
+    if (! TableExists[Person]()) //implicit kicks in to execute operation as blocking
+      CreateTable[Person](5,5).blockingExecute(dynamo, 1 minute) // overriding implicit timeout
+
+    val julian = Person("123", "Julian", "julian@gmail.com")
+    val saved : Option[Person] = Save(julian) andThen Read[Person](julian.id) // implicit automatically executes and blocks for convenience
+    assert(saved == Some(julian))
+```
+
+This means you have to write custom converters for each of your objects unless all your objects have only strings and less than 8 arguments.  That being said, unless you plan on taking advantage of their async layer on top of the normal calls, it is not worth using this library IMO.
+
+If these things are not show stoppers for you, feel free to use the code.  I am no longer going to fix/update/maintain any code within this library.
+
 ## Overview
 
 async-dynamo is an asynchronous scala client for Amazon Dynamo database. It is based on Akka library and provides asynchronous API.
