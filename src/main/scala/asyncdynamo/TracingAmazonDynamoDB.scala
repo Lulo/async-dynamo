@@ -96,7 +96,14 @@ protected class TracingAmazonDynamoDB(delegate  : AmazonDynamoDB, eventStream : 
     val res = try {
       f
     } finally {
-      case ptee: ProvisionedThroughputExceededException => new ProvisionedThroughputExceededException(s"provisioned throughput for the table(s) was exceeded: $tables", ptee)
+      case ptee: ProvisionedThroughputExceededException =>
+        val newPtee = new ProvisionedThroughputExceededException(s"provisioned throughput for the table(s) was exceeded: $tables . ${ptee.getMessage}")
+        newPtee.setRequestId(ptee.getRequestId)
+        newPtee.setErrorCode(ptee.getErrorCode)
+        newPtee.setErrorType(ptee.getErrorType)
+        newPtee.setStatusCode(ptee.getStatusCode)
+        newPtee.setServiceName(ptee.getServiceName)
+        throw newPtee
     }
     (res, System.currentTimeMillis() - start)
   }
